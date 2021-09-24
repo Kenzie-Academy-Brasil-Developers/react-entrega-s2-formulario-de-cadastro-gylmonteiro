@@ -3,13 +3,27 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import "./style.css";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { Button, Input } from "@material-ui/core";
 
 const Form = () => {
+  const history = useHistory({});
   const formSchema = yup.object().shape({
-    name: yup.string().required("Campo obrigatório"),
+    name: yup
+      .string()
+      .required("Campo obrigatório")
+      .matches(
+        "[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$",
+        "Nome deve conter apenas letras"
+      ),
     email: yup.string().required("Campo obrigatório").email("E-mail inválido"),
-    password: yup.string().required("Campo obrigatório"),
+    password: yup
+      .string()
+      .required("Campo obrigatório")
+      .matches(
+        /^(?=.*\d)(?=.*[a-z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/,
+        "É Necessário ter letras, números e ao menos um símbolo."
+      ),
     confpassword: yup
       .string()
       .required("Campo obrigatório")
@@ -24,29 +38,34 @@ const Form = () => {
     resolver: yupResolver(formSchema),
   });
 
-  const [dateRegister, setDateRegister] = useState({});
-
-  const onSubmitFunction = (data) => dateRegister(data);
+  const onSubmitFunction = (data) => history.push(`/home/${data.name}`);
 
   return (
     <div>
       <form className="container" onSubmit={handleSubmit(onSubmitFunction)}>
-        <input placeholder="Nome" {...register("name")} />
+        <Input
+          variant="contained"
+          color="primary"
+          placeholder="Nome"
+          {...register("name")}
+        />
         {errors.name?.message}
-        <input placeholder="Email" {...register("email")} />
+        <Input placeholder="Email" {...register("email")} />
         {errors.email?.message}
 
-        <input placeholder="Senha" type="password" {...register("password")} />
+        <Input placeholder="Senha" type="password" {...register("password")} />
         {errors.password?.message}
 
-        <input
+        <Input
           placeholder="Confirmar Senha"
           type="password"
           {...register("confpassword")}
         />
         {errors.confpassword?.message}
 
-        <button type="submit">CADASTRAR</button>
+        <Button variant="contained" color="primary" type="submit">
+          CADASTRAR
+        </Button>
       </form>
     </div>
   );

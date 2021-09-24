@@ -1,4 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
+  background-color: #ddd;
+  width: 200px;
+  padding: 25px;
 }

@@ -7,7 +7,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <Switch>
-          <Route exact path="/home">
+          <Route exact path="/home/:name">
             <Welcome></Welcome>
           </Route>
           <Route path="/">
